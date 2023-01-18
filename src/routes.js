@@ -16,7 +16,7 @@ router.post('/auth/sign-up', validateNewUserData, userController.addUser)
 router.get('/registers', checkToken, registerController.getRegisters)
 
 // Nova Entrada
-router.post('/new-register', validateNewRegisterData, registerController.newRegister)
+router.post('/new-register', checkToken, validateNewRegisterData, registerController.newRegister)
 
 // Nova Saída
 //router.post('/nova-saida', validateNewRegisterData, registerController.cashOutflow)

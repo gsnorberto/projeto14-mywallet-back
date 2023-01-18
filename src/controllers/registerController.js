@@ -16,12 +16,11 @@ export default {
         }
     },
     getRegisters: async (req, res) => {
-        
-        res.status(200).json({ msg: "Tudo certo"})
         try {
-            
+            let registers = await db.collection('registers').find().toArray()
+            res.status(200).json(registers)
         } catch (err) {
-            
+            res.sendStatus(500)
         }
     },
     // cashOutflow: async (req, res) => {
