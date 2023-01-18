@@ -4,18 +4,19 @@ import registerController from './controllers/registerController.js'
 import userController from './controllers/userController.js'
 import { validateNewUserData, validateUserData } from './middlewares/userValidation.js'
 import { validateNewRegisterData } from './middlewares/registerValidation.js'
+import { checkToken } from './middlewares/authentication.js'
 
 // Login
-router.post('/login', validateUserData, userController.userValidate)
+router.post('/auth/login', validateUserData, userController.userValidate)
 
 // Cadastro
-router.post('/cadastro', validateNewUserData, userController.addUser)
+router.post('/auth/sign-up', validateNewUserData, userController.addUser)
 
 // Home
-router.get('/home', registerController.getRegisters)
+router.get('/registers', checkToken, registerController.getRegisters)
 
 // Nova Entrada
-router.post('/novo-registro', validateNewRegisterData, registerController.newRegister)
+router.post('/new-register', validateNewRegisterData, registerController.newRegister)
 
 // Nova Saída
 //router.post('/nova-saida', validateNewRegisterData, registerController.cashOutflow)

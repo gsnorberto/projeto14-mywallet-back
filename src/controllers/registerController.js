@@ -17,7 +17,7 @@ export default {
     },
     getRegisters: async (req, res) => {
         
-
+        res.status(200).json({ msg: "Tudo certo"})
         try {
             
         } catch (err) {
