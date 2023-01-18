@@ -8,5 +8,5 @@ export const addUserSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     password: Joi.string().required(),
-    confirmPassword: Joi.ref('password'),
+    confirmPassword: Joi.any().valid(Joi.ref('password')).required(),
 })
