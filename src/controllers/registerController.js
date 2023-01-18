@@ -3,8 +3,11 @@ import { db } from "../app.js"
 import { stripHtml } from "string-strip-html"
 
 export default {
-    cashInflow: async (req, res) => {
-        
+    newRegister: async (req, res) => {
+        let value = stripHtml(req.body.value.trim()).result
+        let description = stripHtml(req.body.description.trim()).result
+        let type = 'in';
+        let data = {value, description}
 
         try {
             
@@ -21,13 +24,13 @@ export default {
             
         }
     },
-    cashOutflow: async (req, res) => {
+    // cashOutflow: async (req, res) => {
         
 
-        try {
+    //     try {
             
-        } catch (err) {
+    //     } catch (err) {
             
-        }
-    },
+    //     }
+    // },
 }

@@ -6,7 +6,7 @@ import { validateNewUserData, validateUserData } from './middlewares/userValidat
 import { validateNewRegisterData } from './middlewares/registerValidation.js'
 
 // Login
-router.post('/', validateUserData, userController.userValidate)
+router.post('/login', validateUserData, userController.userValidate)
 
 // Cadastro
 router.post('/cadastro', validateNewUserData, userController.addUser)
@@ -15,10 +15,10 @@ router.post('/cadastro', validateNewUserData, userController.addUser)
 router.get('/home', registerController.getRegisters)
 
 // Nova Entrada
-router.post('/nova-entrada', validateNewRegisterData, registerController.cashInflow)
+router.post('/novo-registro', validateNewRegisterData, registerController.newRegister)
 
 // Nova Saída
-router.post('/nova-saida', validateNewRegisterData, registerController.cashOutflow)
+//router.post('/nova-saida', validateNewRegisterData, registerController.cashOutflow)
 
 // Deletar Registro
 //router.delete('/cadastro', )

@@ -1,4 +1,6 @@
 import { db } from "../app.js"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 import { stripHtml } from "string-strip-html"
 
@@ -7,25 +9,53 @@ export default {
         let name = stripHtml(req.body.name.trim()).result
         let email = stripHtml(req.body.email.trim()).result
         let password = stripHtml(req.body.password.trim()).result
-        let data = {name, email, password}
 
+        // encrypt password
+        const salt = await bcrypt.genSalt(12)
+        let passwordHash = await bcrypt.hash(password, salt)
+        
         try {
-            let user = await db.collection('users').findOne({ email })
+            //check if user exists
+            let userExists = await db.collection('users').findOne({ email })
 
-            // if the email address already exists in the DB
-            if(user) return res.sendStatus(409)
-
+            // if user already exists
+            if(userExists) return res.sendStatus(409) // conflict
+            
+            // Save User
+            let data = {name, email, password: passwordHash}
             db.collection('users').insertOne(data)
-            await res.sendStatus(200) // registration has been successful
+            res.sendStatus(200)
         } catch (err) {
             return res.sendStatus(500)
         }
     },
     userValidate: async (req, res) => {
+        let email = stripHtml(req.body.email.trim()).result
+        let password = stripHtml(req.body.password.trim()).result
+
         try {
+            //check if user exists
+            let userExists = await db.collection('users').findOne({ email })
+
+            // if the user does not exists
+            if(!userExists) return res.sendStatus(404) // not found
+
+            // check password
+            const checkPassword = await bcrypt.compare(password, userExists.password)
+
+            // invalid password
+            if(!checkPassword){
+                return res.sendStatus(401) // unauthorized
+            }
             
+            // Create Token JWT
+            const secret = 'qwerty1234' // TEMPORARY
+            const token = jwt.sign({id: userExists._id}, secret)
+
+            // successful login
+            res.status(200).json(token)
         } catch (err) {
-            
+            return res.sendStatus(500)
         }
     },
 }
