@@ -18,9 +18,6 @@ router.get('/registers', checkToken, registerController.getRegisters)
 // Nova Entrada
 router.post('/new-register', checkToken, validateNewRegisterData, registerController.newRegister)
 
-// Nova Saída
-//router.post('/nova-saida', validateNewRegisterData, registerController.cashOutflow)
-
 // Deletar Registro
 //router.delete('/cadastro', )
 

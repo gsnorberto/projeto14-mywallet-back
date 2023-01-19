@@ -6,7 +6,7 @@ export default {
     newRegister: async (req, res) => {
         let description = stripHtml(req.body.description.trim()).result
         let value = stripHtml(req.body.value.trim()).result
-        let type = req.body.type
+        let type = req.body.type // in or out
         let token = req.headers.authorization.split(" ")[1]
 
         try {
@@ -28,20 +28,22 @@ export default {
         }
     },
     getRegisters: async (req, res) => {
+        let token = req.headers.authorization.split(" ")[1]
+
         try {
-            let registers = await db.collection('registers').find().toArray()
+            // Search user
+            let user = await db.collection("users").findOne({token})
+
+            // If user is not found
+            if(!user){
+                return res.sendStatus(401) // unauthorized
+            }
+
+            let registers = await db.collection('registers').find({ userId: user._id }).toArray()
+
             res.status(200).json(registers)
         } catch (err) {
             res.sendStatus(500)
         }
     },
-    // cashOutflow: async (req, res) => {
-        
-
-    //     try {
-            
-    //     } catch (err) {
-            
-    //     }
-    // },
 }
