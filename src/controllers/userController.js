@@ -1,6 +1,7 @@
 import { db } from "../app.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { ObjectId } from "mongodb"
 
 import { stripHtml } from "string-strip-html"
 
@@ -35,13 +36,13 @@ export default {
 
         try {
             //check if user exists
-            let userExists = await db.collection('users').findOne({ email })
+            let user = await db.collection('users').findOne({ email })
 
             // if the user does not exists
-            if(!userExists) return res.sendStatus(404) // not found
+            if(!user) return res.sendStatus(401) // unauthorized
 
             // check password
-            const checkPassword = await bcrypt.compare(password, userExists.password)
+            const checkPassword = await bcrypt.compare(password, user.password)
 
             // invalid password
             if(!checkPassword){
@@ -50,7 +51,15 @@ export default {
             
             // Create Token JWT
             const secret = 'qwerty1234' // TEMPORARY
-            const token = jwt.sign({id: userExists._id}, secret)
+            const token = jwt.sign({id: user._id}, secret)
+
+            // Save token
+            db.collection('users').updateOne(
+                {_id: ObjectId(user._id)}, 
+                {
+                    $set: {token}
+                }
+            )
 
             // successful login
             res.status(200).json(token)
