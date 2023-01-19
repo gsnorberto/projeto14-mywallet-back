@@ -9,7 +9,7 @@ export default {
     addUser: async (req, res) => {
         let name = stripHtml(req.body.name.trim()).result
         let email = stripHtml(req.body.email.trim()).result
-        let password = stripHtml(req.body.password.trim()).result
+        let password = req.body.password
 
         // encrypt password
         const salt = await bcrypt.genSalt(12)
