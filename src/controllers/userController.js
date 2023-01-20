@@ -20,7 +20,7 @@ export default {
             let userExists = await db.collection('users').findOne({ email })
 
             // if user already exists
-            if(userExists) return res.sendStatus(409) // conflict
+            if(userExists) return res.status(409).send("Endereço de email já cadastrado") // conflict
             
             // Save User
             let data = {name, email, password: passwordHash}
@@ -61,8 +61,10 @@ export default {
                 }
             )
 
+            let data = { token, name: user.name }
+
             // successful login
-            res.status(200).json(token)
+            res.status(200).json(data)
         } catch (err) {
             return res.sendStatus(500)
         }

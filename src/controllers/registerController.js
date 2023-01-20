@@ -18,7 +18,7 @@ export default {
                 return res.sendStatus(401) // unauthorized
             }
 
-            let data = {value, description, type, userId: user._id}
+            let data = {value, description, type, userId: user._id, date: Date.now()}
 
             // Save register
             db.collection("registers").insertOne(data)
