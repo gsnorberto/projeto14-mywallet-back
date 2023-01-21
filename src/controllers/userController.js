@@ -1,4 +1,4 @@
-import { db } from "../app.js"
+import db from "../config/database.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { ObjectId } from "mongodb"

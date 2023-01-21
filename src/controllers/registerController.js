@@ -1,4 +1,4 @@
-import { db } from "../app.js"
+import db from "../config/database.js"
 
 import { stripHtml } from "string-strip-html"
 
