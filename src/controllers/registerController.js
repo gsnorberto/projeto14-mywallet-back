@@ -11,7 +11,7 @@ export default {
         let token = req.headers.authorization.split(" ")[1]
 
         try {
-            // Search user
+            // Find user
             let user = await db.collection("users").findOne({ token })
 
             // If user is not found
@@ -32,7 +32,7 @@ export default {
         let token = req.headers.authorization.split(" ")[1]
 
         try {
-            // Search user
+            // Find user
             let user = await db.collection("users").findOne({ token })
 
             // If user is not found
@@ -47,6 +47,40 @@ export default {
             res.sendStatus(500)
         }
     },
+    getRegister: async (req, res) => {
+        let token = req.headers.authorization.split(" ")[1]
+        let idRegister = req.params.id.trim()
+
+        if(!idRegister) {
+            return res.sendStatus(400)
+        }
+
+        try {
+            // Find user
+            let user = await db.collection("users").findOne({ token })
+
+            // If user is not found
+            if (!user) {
+                return res.sendStatus(401) // unauthorized
+            }
+
+            // Find register
+            let register = await db.collection('registers').findOne({
+                $and: [
+                    { _id: ObjectId(idRegister) },
+                    { userId: user._id }
+                ]
+            })
+
+            if(register){
+                res.status(200).json(register)
+            } else {
+                res.sendStatus(400)
+            }
+        } catch (err) {
+            res.sendStatus(500)
+        }
+    },
     editRegister: async (req, res) => {
         let registerID = stripHtml(req.params.id.trim()).result
         let token = req.headers.authorization.split(" ")[1]
@@ -55,7 +89,7 @@ export default {
         let type = req.body.type // in or out
 
         try {
-            // Search user
+            // Find user
             let user = await db.collection("users").findOne({ token })
 
             // If user is not found
@@ -63,7 +97,7 @@ export default {
                 return res.sendStatus(401) // unauthorized
             }
 
-            // search register and check if user owns it
+            // Find register and check if user owns it
             let register = await db.collection("registers").findOne({
                 $and: [
                     { _id: ObjectId(registerID) },
@@ -89,7 +123,7 @@ export default {
         let token = req.headers.authorization.split(" ")[1]
 
         try {
-            // Search user
+            // Find user
             let user = await db.collection("users").findOne({ token })
 
             // If user is not found
@@ -97,7 +131,7 @@ export default {
                 return res.sendStatus(401) // unauthorized
             }
 
-            // search register and check if user owns it
+            // Find register and check if user owns it
             let register = await db.collection("registers").findOne({
                 $and: [
                     { _id: ObjectId(registerID) },

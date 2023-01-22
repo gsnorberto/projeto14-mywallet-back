@@ -9,19 +9,20 @@ import { checkToken } from './middlewares/authentication.js'
 // Login
 router.post('/auth/login', validateUserData, userController.userValidate)
 
-// Cadastro
+// Create a new user
 router.post('/auth/sign-up', validateNewUserData, userController.addUser)
 
-// Home
+// Get registers
 router.get('/registers', checkToken, registerController.getRegisters)
+router.get('/register/:id', checkToken, registerController.getRegister)
 
-// Nova Entrada
+// New register
 router.post('/new-register', checkToken, validateNewRegisterData, registerController.newRegister)
 
-// Deletar Registro
+// Delete register
 router.delete('/register/:id', checkToken, validateRegisterID, registerController.deleteRegister)
 
-// Editar registro
+// Edit register
 router.put('/register/:id', checkToken, validateRegisterID, validateNewRegisterData, registerController.editRegister )
 
 export default router
