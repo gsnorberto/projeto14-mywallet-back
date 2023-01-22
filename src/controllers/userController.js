@@ -24,7 +24,7 @@ export default {
             
             // Save User
             let data = {name, email, password: passwordHash}
-            db.collection('users').insertOne(data)
+            await db.collection('users').insertOne(data)
             res.sendStatus(200)
         } catch (err) {
             return res.sendStatus(500)
@@ -54,7 +54,7 @@ export default {
             const token = jwt.sign({id: user._id}, secret)
 
             // Save token
-            db.collection('users').updateOne(
+            await db.collection('users').updateOne(
                 {_id: ObjectId(user._id)}, 
                 {
                     $set: {token}

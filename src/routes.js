@@ -3,7 +3,7 @@ let router = express.Router()
 import registerController from './controllers/registerController.js'
 import userController from './controllers/userController.js'
 import { validateNewUserData, validateUserData } from './middlewares/userValidation.js'
-import { validateNewRegisterData } from './middlewares/registerValidation.js'
+import { validateNewRegisterData, validateRegisterID } from './middlewares/registerValidation.js'
 import { checkToken } from './middlewares/authentication.js'
 
 // Login
@@ -19,12 +19,9 @@ router.get('/registers', checkToken, registerController.getRegisters)
 router.post('/new-register', checkToken, validateNewRegisterData, registerController.newRegister)
 
 // Deletar Registro
-//router.delete('/cadastro', )
+router.delete('/register/:id', checkToken, validateRegisterID, registerController.deleteRegister)
 
-// Editar entrada
-//router.put('/editar-entrada/:id', )
-
-// Editar saída
-//router.put('/editar-saida/:id', )
+// Editar registro
+router.put('/register/:id', checkToken, validateRegisterID, registerController.editRegister )
 
 export default router

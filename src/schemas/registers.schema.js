@@ -5,3 +5,7 @@ export const newRegisterSchema = Joi.object({
     description: Joi.string().required(),
     type: Joi.string().required().valid("in", "out"),
 })
+
+export const validateRegisterIDSchema = Joi.object({
+    id: Joi.string().required()
+})
