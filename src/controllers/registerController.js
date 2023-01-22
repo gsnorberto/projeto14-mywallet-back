@@ -12,14 +12,14 @@ export default {
 
         try {
             // Search user
-            let user = await db.collection("users").findOne({token})
+            let user = await db.collection("users").findOne({ token })
 
             // If user is not found
-            if(!user){
+            if (!user) {
                 return res.sendStatus(401) // unauthorized
             }
 
-            let data = {value, description, type, userId: user._id, date: Date.now()}
+            let data = { value, description, type, userId: user._id, date: Date.now() }
 
             // Save register
             await db.collection("registers").insertOne(data)
@@ -33,10 +33,10 @@ export default {
 
         try {
             // Search user
-            let user = await db.collection("users").findOne({token})
+            let user = await db.collection("users").findOne({ token })
 
             // If user is not found
-            if(!user){
+            if (!user) {
                 return res.sendStatus(401) // unauthorized
             }
 
@@ -52,9 +52,34 @@ export default {
         let token = req.headers.authorization.split(" ")[1]
         let description = stripHtml(req.body.description.trim()).result
         let value = stripHtml(req.body.value.trim()).result
+        let type = req.body.type // in or out
 
         try {
-            
+            // Search user
+            let user = await db.collection("users").findOne({ token })
+
+            // If user is not found
+            if (!user) {
+                return res.sendStatus(401) // unauthorized
+            }
+
+            // search register and check if user owns it
+            let register = await db.collection("registers").findOne({
+                $and: [
+                    { _id: ObjectId(registerID) },
+                    { userId: user._id }
+                ]
+            })
+            if (!register) {
+                return res.sendStatus(400)
+            }
+
+            let data = { description, value, type }
+
+            await db.collection('registers').updateOne({ _id: ObjectId(registerID) },
+                { $set:  data }
+            )
+            res.sendStatus(200)
         } catch (err) {
             res.sendStatus(500)
         }
@@ -65,21 +90,21 @@ export default {
 
         try {
             // Search user
-            let user = await db.collection("users").findOne({token})
+            let user = await db.collection("users").findOne({ token })
 
             // If user is not found
-            if(!user){
+            if (!user) {
                 return res.sendStatus(401) // unauthorized
             }
 
             // search register and check if user owns it
             let register = await db.collection("registers").findOne({
-                $and:[
-                    {_id: ObjectId(registerID)},
-                    {userId: user._id}
+                $and: [
+                    { _id: ObjectId(registerID) },
+                    { userId: user._id }
                 ]
             })
-            if(!register){
+            if (!register) {
                 return res.sendStatus(400)
             }
 

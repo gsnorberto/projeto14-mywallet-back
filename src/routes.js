@@ -22,6 +22,6 @@ router.post('/new-register', checkToken, validateNewRegisterData, registerContro
 router.delete('/register/:id', checkToken, validateRegisterID, registerController.deleteRegister)
 
 // Editar registro
-router.put('/register/:id', checkToken, validateRegisterID, registerController.editRegister )
+router.put('/register/:id', checkToken, validateRegisterID, validateNewRegisterData, registerController.editRegister )
 
 export default router
